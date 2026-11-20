@@ -8,3 +8,4 @@ A Trello-style Kanban board in Python 3.13 with the standard library, SQLite and
 
 - [Step 1: Project foundation](Step-1-Foundation): the tooling, the layers and the first page.
 - [Step 2: Domain and storage](Step-2-Domain-Storage): the board rules, SQLite and the board page.
+- [Step 3: JSON API and editing](Step-3-Api-Editing): the API, the router and the editing controls.

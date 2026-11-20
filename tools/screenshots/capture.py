@@ -19,7 +19,7 @@ from todo_list.domain.errors.board_errors import NotFoundError
 from todo_list.infrastructure.persistence.sqlite_board_repository import (
     SqliteBoardRepository,
 )
-from todo_list.main import build_board_controller
+from todo_list.main import build_router_for
 from todo_list.presentation.http_server import create_server
 
 OUTPUT_DIR = Path("/work/docs/screenshots")
@@ -68,9 +68,25 @@ def step_02(page: Page, base_url: str) -> None:
     page.wait_for_selector(".card")
 
 
+def step_03(page: Page, base_url: str) -> None:
+    """@brief Add a list and a card through the page, then open a card form."""
+    page.set_viewport_size({"width": 1700, "height": 720})
+    page.goto(base_url + "/")
+    page.wait_for_selector(".card")
+    page.get_by_role("button", name="+ Add another list").click()
+    page.get_by_label("List name").fill("Ideas")
+    page.get_by_role("button", name="Add list").click()
+    page.wait_for_selector("h2:text-is('Ideas')")
+    todo = page.locator(".list", has=page.locator("h2:text-is('To Do')"))
+    todo.get_by_role("button", name="+ Add a card").click()
+    todo.get_by_label("Card title").fill("Write the API tests")
+    page.evaluate("document.getElementById('board').scrollLeft = 0")
+
+
 SCENARIOS: dict[str, Callable[[Page, str], None]] = {
     "step-01": step_01,
     "step-02": step_02,
+    "step-03": step_03,
 }
 
 
@@ -81,11 +97,12 @@ def main(step: str) -> int:
     @return The exit code.
     """
     database = Path(tempfile.mkdtemp()) / "shots.sqlite3"
-    controller = build_board_controller(database)
-    controller.show_board()  # creates the default board
+    repository = SqliteBoardRepository(database)
+    router = build_router_for(database)
+    router.dispatch("GET", "/api/board", b"")  # creates the default board
     if step != "step-01":
-        seed_demo_cards(SqliteBoardRepository(database))
-    server = create_server("127.0.0.1", 0, controller)
+        seed_demo_cards(repository)
+    server = create_server("127.0.0.1", 0, router)
     threading.Thread(target=server.serve_forever, daemon=True).start()
     host, port = server.server_address[:2]
     with sync_playwright() as playwright:

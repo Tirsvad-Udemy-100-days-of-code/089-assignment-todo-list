@@ -67,12 +67,15 @@ python -m todo_list
 
 Then open <http://127.0.0.1:8000/> in a browser. Stop the server with `Ctrl+C`. The host and port are in `src/todo_list/constants.py`.
 
+The page uses a JSON API under `/api/` (board, lists, cards); the routes are listed in the wiki, step 3.
+
 ## 📸 Screenshots
 
 | Step | What it shows |
 | --- | --- |
 | 1. Project foundation | The first page with the five empty lists ![Step 1](docs/screenshots/step-01.png) |
 | 2. Domain and storage | The board read from SQLite with sample cards ![Step 2](docs/screenshots/step-02.png) |
+| 3. JSON API and editing | A new list and a card form, added through the page ![Step 3](docs/screenshots/step-03.png) |
 
 Screenshots are made in a Docker container, never on the desktop:
 
@@ -92,6 +95,13 @@ doxygen Doxyfile
 ```
 
 `pytest` also prints the coverage and fails below 90 percent. Run the opengrep scan before every push.
+
+The browser tests in `tests/e2e/` run only in the Docker container, never on the desktop. They write their result to `results/e2e.xml`:
+
+```powershell
+docker build -t todo-list-shots tools/screenshots
+docker run --rm -v "${PWD}:/work" -w /work --entrypoint python todo-list-shots -m pytest -o addopts="" -o pythonpath="src tests" --junitxml=results/e2e.xml tests/e2e
+```
 
 ## 📄 License
 
