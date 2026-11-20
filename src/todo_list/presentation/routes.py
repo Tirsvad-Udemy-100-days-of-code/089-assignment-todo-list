@@ -24,8 +24,10 @@ def build_router(
     router.add("GET", "/api/board", board.board_json)
     router.add("POST", "/api/lists", lists.create_list)
     router.add("PATCH", "/api/lists/{id}", lists.rename_list)
+    router.add("PATCH", "/api/lists/{id}/move", lists.move_list)
     router.add("DELETE", "/api/lists/{id}", lists.delete_list)
     router.add("POST", "/api/lists/{id}/cards", cards.create_card)
     router.add("PATCH", "/api/cards/{id}", cards.rename_card)
+    router.add("PATCH", "/api/cards/{id}/move", cards.move_card)
     router.add("DELETE", "/api/cards/{id}", cards.delete_card)
     return router

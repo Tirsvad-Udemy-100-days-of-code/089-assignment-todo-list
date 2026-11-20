@@ -70,5 +70,9 @@ ERROR_FIELD_MISSING = "The field is missing or has the wrong type: "
 ERROR_NOT_FOUND = "Not found."
 ERROR_METHOD_NOT_ALLOWED = "Method not allowed."
 
+## @brief JSON fields of the move requests.
+FIELD_LIST_ID = "list_id"
+FIELD_POSITION = "position"
+
 ## @brief Largest request body the server reads, in bytes.
 MAX_BODY_BYTES = 65536

@@ -4,6 +4,7 @@ from todo_list import constants
 from todo_list.application.use_cases.list_use_cases import (
     CreateList,
     DeleteList,
+    MoveList,
     RenameList,
 )
 from todo_list.presentation.shared.http_request import (
@@ -19,12 +20,17 @@ class ListController:
     """@brief Answers the requests that change lists."""
 
     def __init__(
-        self, create: CreateList, rename: RenameList, delete: DeleteList
+        self,
+        create: CreateList,
+        rename: RenameList,
+        delete: DeleteList,
+        move: MoveList,
     ) -> None:
-        """@param create The use cases the controller calls (create, rename, delete)."""
+        """@param create The use cases the controller calls (create to move)."""
         self._create = create
         self._rename = rename
         self._delete = delete
+        self._move = move
 
     def create_list(self, request: HttpRequest) -> HttpResponse:
         """@brief POST /api/lists with board_id and name."""
@@ -39,6 +45,14 @@ class ListController:
         data = request.json_object()
         renamed = self._rename.execute(request.path_id(), require_str(data, "name"))
         return json_response(constants.STATUS_OK, renamed)
+
+    def move_list(self, request: HttpRequest) -> HttpResponse:
+        """@brief PATCH /api/lists/{id}/move with position."""
+        data = request.json_object()
+        moved = self._move.execute(
+            request.path_id(), require_int(data, constants.FIELD_POSITION)
+        )
+        return json_response(constants.STATUS_OK, moved)
 
     def delete_list(self, request: HttpRequest) -> HttpResponse:
         """@brief DELETE /api/lists/{id}."""
