@@ -1,0 +1,15 @@
+# Doxygen configuration. Run `doxygen Doxyfile` from the repository root.
+PROJECT_NAME           = "Todo List"
+PROJECT_BRIEF          = "Kanban todo list: boards, lists and cards"
+OUTPUT_DIRECTORY       = docs/doxygen
+INPUT                  = src
+FILE_PATTERNS          = *.py
+RECURSIVE              = YES
+EXTRACT_ALL            = YES
+OPTIMIZE_OUTPUT_JAVA   = YES
+JAVADOC_AUTOBRIEF      = YES
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+QUIET                  = YES
+WARN_IF_UNDOCUMENTED   = YES
+WARN_AS_ERROR          = YES
