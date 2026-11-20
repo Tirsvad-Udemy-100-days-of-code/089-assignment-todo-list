@@ -9,7 +9,7 @@
 ## Version History
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
-| 2026-11-20 | Proposed | Jens Tirsvad Nielsen | S01 | Review of SRC-MIL-002 | pending |
+| 2026-11-20 | Proposed | Jens Tirsvad Nielsen | S01 | Review of SRC-MIL-002 | [b9a6501] |
 
 ---
 
@@ -59,3 +59,4 @@ Go — all Mandatory criteria pass or are N-A with a reason. Reviewer is the sta
 
 [SRC-MIL-002]: ../../../src/todo_list
 [QC-PY-001]: ../../../framework/qc/code/qc-programming-python.md
+[b9a6501]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/089-assignment-todo-list/commit/b9a6501fcb77e513cbb7bda110ef0eebfd6c3b21
