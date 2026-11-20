@@ -3,20 +3,20 @@
 ## Metadata
 | Key | Value |
 | --- | --- |
-| ID | RC-003 |
-| CrossReference | [PP-001], [QC-PP-001], [QC-LANG-001] |
+| ID | RC-011 |
+| CrossReference | [BC-001], [QC-BC-001], [QC-LANG-001] |
 
 ## Version History
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
-| 2026-11-20 | Proposed | Jens Tirsvad Nielsen | S01 | Review of PP-001 | [a3a64c5] |
+| 2026-11-20 | Proposed | Jens Tirsvad Nielsen | S01 | Review of BC-001 | pending |
 
 ---
 
 ## Artifact Under Review
 
-- Instance reviewed: [PP-001]
-- Checklist used: [QC-PP-001]
+- Instance reviewed: [BC-001]
+- Checklist used: [QC-BC-001]
 - Scope: full review
 - Language and domain: en / it (the artifact's Metadata rows)
 - Language reviewer: S01 (reads English and knows the IT domain)
@@ -26,21 +26,14 @@
 
 | # | Criterion | Status | Evidence/Notes |
 | --- | --- | --- | --- |
-| 1 | The plan states its start date, end date and the constraint it must fit | Pass | Planning Assumptions: start 2026-11-23, end 2026-12-04, per BC-001 constraint. |
-| 2 | Every milestone or gateway is listed once with its document, decision date and owner | Pass | Pass |
-| 3 | Every decision date lies inside the plan's window and is consistent with the dates in the linked `MIL-*` document | Pass | Decision dates equal the target dates in each MIL and fall inside the window. |
-| 4 | Every in-scope item of the Business Case is delivered at a named gateway (scope coverage) | Pass | Scope Coverage maps every In Scope item to a gateway. |
-| 5 | Dependencies between gateways are stated, acyclic and consistent with the schedule order | Pass | Chain MIL-001 to MIL-006 is acyclic and matches the schedule. |
-| 6 | The plan states what happens to later gateways and to the end date when a gateway is No-Go | Pass | Dependencies section says a No-Go moves later dates and the end date is reported at risk. |
-| 7 | Owners, reviewers and escalation roles use Stakeholder Analysis IDs and match the governance RACI | N-A | No governance document exists; every owner and reviewer is S01 and no role name is invented. |
-| 8 | Planning assumptions are listed with their source, and a changed baseline is recorded with its reason | Pass | Assumptions state their source. |
-| 9 | Plan risks are listed with impact and a mitigation, and trace to Business Case risks where they come from there | Pass | Three plan risks with mitigation. |
-| 10 | Open issues are listed, and none contradicts a statement elsewhere in the plan | Pass | Open Issues do not contradict the plan. |
-| 11 | Each gateway's main deliverable is stated and matches the deliverable of its `MIL-*` document | Pass | Pass |
-| 12 | Gateways that deliver user stories name them, and those that do not say why | Pass | Stories column says none for every gateway; no user stories exist. |
-| 13 | The schedule view (table, Gantt) and the dependency view agree with each other | Pass | Gantt bars and table agree. |
-| 14 | Each gateway is linked to its issue-tracker milestone, or marked as not yet synced | Pass | Milestone column is blank until the sync, as the framework says. |
-| 15 | The plan is a singleton: one Project Plan per project, changes recorded in Version History | Pass | One plan, Version History kept. |
+| 1 | ROI/Cost-Benefit analysis is quantitative, or where qualitative, is explicitly justified | Pass | Cost–Benefit table is qualitative and the text says why: a learning exercise without revenue. |
+| 2 | Risks are identified with documented impact and mitigation | Pass | Risks table has impact and mitigation for all 5 risks. |
+| 3 | Success criteria are measurable, stating explicit targets rather than vague aspirations | Pass | 8 success criteria with numeric or checkable targets. |
+| 4 | Scope explicitly separates In Scope vs Out of Scope | Pass | In Scope and Out of Scope are separate subsections. |
+| 5 | Stakeholders are cross-referenced to Stakeholder Analysis IDs rather than re-described inline | Pass | Stakeholders table cites S01, S02, S03 and points to SA-001. |
+| 6 | Methodology and quality-standard foundation are stated explicitly (e.g. ISO/IEC 25010, Larman) | Pass | Methodological and Standards Foundation names Larman, Clean Architecture, ISO/IEC 25010:2023. |
+| 7 | Assumptions and constraints are explicit and clearly distinguished from one another | Pass | Assumptions and Constraints are separate lists. |
+| 8 | Document supports executive decision-making with a clear, unambiguous recommendation | Pass | Recommendation: Proceed. |
 
 ## Language and Domain Results
 
@@ -59,7 +52,7 @@
 
 ## Overall Verdict
 
-Go — no Mandatory criterion fails; the only Fail is Optional and non-blocking. Reviewer is the stand-in for S01, not independent.
+Go (re-review after a wording change) — no Mandatory criterion fails; the only Fail is Optional and non-blocking. Reviewer is the stand-in for S01, not independent.
 
 ## Action Items
 
@@ -69,7 +62,6 @@ Go — no Mandatory criterion fails; the only Fail is Optional and non-blocking.
 
 ---
 
-[PP-001]: ../../project-plan.md
-[QC-PP-001]: ../../../framework/qc/artifacts/qc-project-plan.md
+[BC-001]: ../../business-case.md
+[QC-BC-001]: ../../../framework/qc/artifacts/qc-business-case.md
 [QC-LANG-001]: ../../../framework/qc/artifacts/qc-language-domain.md
-[a3a64c5]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/089-assignment-todo-list/commit/a3a64c5ad7831b1e3ad88ecf9902ebcf6f2f0d16

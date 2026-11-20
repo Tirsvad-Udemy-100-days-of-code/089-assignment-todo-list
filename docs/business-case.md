@@ -11,7 +11,8 @@
 ## Version History
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
-| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Initial version | [a3a64c5] |
+| 2026-11-20 | Deprecated | Jens Tirsvad Nielsen | S01 | Initial version | [a3a64c5] |
+| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Reworded the wording constraint | pending |
 
 ---
 
@@ -154,7 +155,7 @@ workflow, so the repository also demonstrates process, not only code.
 - Python 3.13 or newer; a local `.venv`; pytest; constants in `constants.py`.
 - Folders `src/`, `tests/` and `docs/`.
 - No runtime dependencies unless needed; none are expected.
-- The text "AI" does not appear in any artifact of the repository.
+- No artifact of the repository names the tools used to write it.
 - Duration: finish by 2026-12-04, about 200 minutes of course effort plus
   documentation work.
 - Tokens come from `.env` for personal use only; they are not imported, tested
