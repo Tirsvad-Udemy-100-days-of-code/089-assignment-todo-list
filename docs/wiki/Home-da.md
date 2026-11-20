@@ -10,3 +10,4 @@ En Kanban-tavle i Trello-stil i Python 3.13 med standardbiblioteket, SQLite og a
 - [Trin 2: Domæne og lager](Step-2-Domain-Storage-da): tavlens regler, SQLite og tavlesiden.
 - [Trin 3: JSON-API og redigering](Step-3-Api-Editing-da): API'et, routeren og redigeringsknapperne.
 - [Trin 4: Kanban-tavle og træk og slip](Step-4-Kanban-Board-da): flytning af kort og lister.
+- [Trin 5: Kortdetaljer](Step-5-Card-Details-da): etiket, beskrivelse, forfaldsdato, færdig og kommentarer.
