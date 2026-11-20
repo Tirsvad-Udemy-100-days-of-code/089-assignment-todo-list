@@ -47,3 +47,8 @@ select = ["E", "F", "I", "N", "UP", "B", "SIM"]
 [tool.mypy]
 strict = true
 mypy_path = "src:tests"
+
+[[tool.mypy.overrides]]
+# playwright is installed only in the Docker image that runs tests/e2e.
+module = ["playwright.*"]
+ignore_missing_imports = true
