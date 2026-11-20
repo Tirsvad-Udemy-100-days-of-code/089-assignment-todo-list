@@ -10,6 +10,7 @@ A Trello-style Kanban todo list built with the Python standard library, SQLite a
 - [Run](#-run)
 - [Screenshots](#-screenshots)
 - [Tests](#-tests)
+- [Reflection](#-reflection)
 - [License](#-license)
 - [Links](#-links)
 - [Appendix: Project documents](#-appendix-project-documents)
@@ -67,7 +68,7 @@ python -m todo_list
 
 Then open <http://127.0.0.1:8000/> in a browser. Stop the server with `Ctrl+C`. The host and port are in `src/todo_list/constants.py`.
 
-The page uses a JSON API under `/api/` (board, lists, cards); the routes are listed in the wiki, step 3.
+The page uses a JSON API under `/api/` (board, lists, cards, card details and comments); the routes are listed in the wiki, steps 3 to 5.
 
 ## 📸 Screenshots
 
@@ -78,6 +79,7 @@ The page uses a JSON API under `/api/` (board, lists, cards); the routes are lis
 | 3. JSON API and editing | A new list and a card form, added through the page ![Step 3](docs/screenshots/step-03.png) |
 | 4. Kanban board and drag and drop | A card dragged from To Do to Review ![Step 4](docs/screenshots/step-04.png) |
 | 5. Card details | The card detail dialog ![Step 5](docs/screenshots/step-05.png) |
+| 6. Wrap-up and reflection | The finished board ![Step 6](docs/screenshots/step-06.png) |
 
 Screenshots are made in a Docker container, never on the desktop:
 
@@ -104,6 +106,16 @@ The browser tests in `tests/e2e/` run only in the Docker container, never on the
 docker build -t todo-list-shots tools/screenshots
 docker run --rm -v "${PWD}:/work" -w /work --entrypoint python todo-list-shots -m pytest -o addopts="" -o pythonpath="src tests" --junitxml=results/e2e.xml tests/e2e
 ```
+
+## 💭 Reflection
+
+- **Approach.** Plan first, then six small steps; each step is one branch, one review and one pull request, with a screenshot and a wiki page.
+- **Easy.** The domain rules and SQLite: the layers keep the rules free of HTTP and SQL, so most tests run in milliseconds.
+- **Hard.** Drag and drop (the drop position comes from the pointer, and the test needs a real browser) and due dates (a forgiving parser accepts shapes you do not want).
+- **Biggest learning.** A framework is a choice with a cost. The standard library was enough, so there are no runtime dependencies and every layer is visible.
+- **Differently next time.** Start the browser tests earlier and settle the stack before the first milestone.
+
+The longer version is in the wiki, step 6.
 
 ## 📄 License
 
