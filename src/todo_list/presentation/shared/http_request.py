@@ -64,3 +64,44 @@ def require_int(data: Mapping[str, object], field: str) -> int:
     if isinstance(value, bool) or not isinstance(value, int):
         raise BadRequestError(constants.ERROR_FIELD_MISSING + field)
     return value
+
+
+def optional_str(data: Mapping[str, object], field: str) -> str | None:
+    """@brief Read a text field that may be absent.
+
+    @return The text, or None when the field is absent.
+    @throws BadRequestError When the field is present and not text.
+    """
+    if field not in data:
+        return None
+    return require_str(data, field)
+
+
+def optional_bool(data: Mapping[str, object], field: str) -> bool | None:
+    """@brief Read a true/false field that may be absent.
+
+    @return The value, or None when the field is absent.
+    @throws BadRequestError When the field is present and not true or false.
+    """
+    if field not in data:
+        return None
+    value = data[field]
+    if not isinstance(value, bool):
+        raise BadRequestError(constants.ERROR_FIELD_MISSING + field)
+    return value
+
+
+def optional_nullable_str[A](
+    data: Mapping[str, object], field: str, absent: A
+) -> str | None | A:
+    """@brief Read a text field that may be absent or null.
+
+    @param absent The value to return when the field is absent.
+    @return The text, None for a JSON null, or absent.
+    @throws BadRequestError When the field is present and neither text nor null.
+    """
+    if field not in data:
+        return absent
+    if data[field] is None:
+        return None
+    return require_str(data, field)

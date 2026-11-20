@@ -52,7 +52,17 @@ def test_create_rename_and_delete_a_card(api: ApiClient) -> None:
         "PATCH", f"/api/cards/{created['id']}", {"title": "Wrote"}
     )
     assert (status, renamed["title"]) == (200, "Wrote")
-    assert _board(api)["lists"][0]["cards"] == [{"id": created["id"], "title": "Wrote"}]
+    assert _board(api)["lists"][0]["cards"] == [
+        {
+            "id": created["id"],
+            "title": "Wrote",
+            "label": "",
+            "description": "",
+            "due_date": None,
+            "done": False,
+            "comment_count": 0,
+        }
+    ]
 
     assert api.request("DELETE", f"/api/cards/{created['id']}") == (204, None)
     assert _board(api)["lists"][0]["cards"] == []

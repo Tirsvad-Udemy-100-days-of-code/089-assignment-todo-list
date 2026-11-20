@@ -4,7 +4,11 @@ import re
 from collections.abc import Callable
 
 from todo_list import constants
-from todo_list.domain.errors.board_errors import InvalidNameError, NotFoundError
+from todo_list.domain.errors.board_errors import (
+    InvalidDetailError,
+    InvalidNameError,
+    NotFoundError,
+)
 from todo_list.presentation.shared.http_request import BadRequestError, HttpRequest
 from todo_list.presentation.shared.http_response import HttpResponse
 from todo_list.presentation.shared.json_responses import error_response
@@ -62,7 +66,7 @@ class Router:
     def _call(handler: Handler, request: HttpRequest) -> HttpResponse:
         try:
             return handler(request)
-        except (BadRequestError, InvalidNameError) as error:
+        except (BadRequestError, InvalidNameError, InvalidDetailError) as error:
             return error_response(constants.STATUS_BAD_REQUEST, str(error))
         except NotFoundError as error:
             return error_response(constants.STATUS_NOT_FOUND, str(error))

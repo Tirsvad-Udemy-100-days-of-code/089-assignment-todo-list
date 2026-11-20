@@ -39,7 +39,15 @@ class GetBoard:
                 card_list.id,
                 card_list.name,
                 tuple(
-                    CardDto(card.id, card.title)
+                    CardDto(
+                        card.id,
+                        card.title,
+                        card.label,
+                        card.description,
+                        card.due_date,
+                        card.done,
+                        card.comment_count,
+                    )
                     for card in self._repository.cards_of(card_list.id)
                 ),
             )

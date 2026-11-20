@@ -6,10 +6,13 @@ from pathlib import Path
 from todo_list import constants
 from todo_list.application.use_cases.board_use_cases import GetBoard
 from todo_list.application.use_cases.card_use_cases import (
+    AddComment,
     CreateCard,
     DeleteCard,
+    DeleteComment,
+    GetCard,
     MoveCard,
-    RenameCard,
+    UpdateCardDetails,
 )
 from todo_list.application.use_cases.list_use_cases import (
     CreateList,
@@ -45,9 +48,12 @@ def build_router_for(database_path: Path) -> Router:
         ),
         CardController(
             CreateCard(repository),
-            RenameCard(repository),
+            UpdateCardDetails(repository),
             DeleteCard(repository),
             MoveCard(repository),
+            GetCard(repository),
+            AddComment(repository),
+            DeleteComment(repository),
         ),
     )
 
