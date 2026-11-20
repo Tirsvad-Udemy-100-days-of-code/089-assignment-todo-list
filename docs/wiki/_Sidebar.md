@@ -4,6 +4,7 @@
 - [Step 1: Project foundation](Step-1-Foundation)
 - [Step 2: Domain and storage](Step-2-Domain-Storage)
 - [Step 3: JSON API and editing](Step-3-Api-Editing)
+- [Step 4: Kanban board and drag and drop](Step-4-Kanban-Board)
 
 **Languages**
 
