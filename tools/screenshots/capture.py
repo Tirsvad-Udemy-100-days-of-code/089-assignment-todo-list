@@ -97,11 +97,61 @@ def step_04(page: Page, base_url: str) -> None:
     page.evaluate("document.getElementById('board').scrollLeft = 0")
 
 
+def seed_card_details(repository: SqliteBoardRepository) -> None:
+    """@brief Give demo cards labels, descriptions, due dates and comments."""
+    board = repository.first_board()
+    if board is None:
+        raise NotFoundError("No board to seed")
+    cards = {
+        card.title: card
+        for card_list in repository.lists_of(board.id)
+        for card in repository.cards_of(card_list.id)
+    }
+    details = [
+        (
+            "Add the card dialog",
+            "blue",
+            "Label, description, due date and comments.",
+            "2099-06-30",
+        ),
+        (
+            "Plan the release notes",
+            "purple",
+            "Draft the notes for version 1.",
+            "2020-01-01",
+        ),
+        ("Write the project README", "orange", "", "2099-03-15"),
+        ("Create the repository", "green", "Done on day one.", "2020-01-02"),
+        ("Fix the layout on phones", "red", "", None),
+    ]
+    for title, label, description, due_date in details:
+        done = title == "Create the repository"
+        repository.update_card_details(
+            cards[title].id, label, description, due_date, done
+        )
+    created_at = "2026-01-05T09:30:00+00:00"
+    for text in ("Start with the dialog markup.", "Remember the overdue colour."):
+        repository.add_comment(cards["Add the card dialog"].id, text, created_at)
+    repository.add_comment(
+        cards["Plan the release notes"].id, "Waiting for input.", created_at
+    )
+
+
+def step_05(page: Page, base_url: str) -> None:
+    """@brief Open the details dialog of a card, with the board behind it."""
+    page.set_viewport_size({"width": 1700, "height": 720})
+    page.goto(base_url + "/")
+    page.wait_for_selector(".card")
+    page.locator(".card", has_text="Add the card dialog").locator(".card-body").click()
+    page.wait_for_selector("dialog.details[open] .comment")
+
+
 SCENARIOS: dict[str, Callable[[Page, str], None]] = {
     "step-01": step_01,
     "step-02": step_02,
     "step-03": step_03,
     "step-04": step_04,
+    "step-05": step_05,
 }
 
 
@@ -117,6 +167,8 @@ def main(step: str) -> int:
     router.dispatch("GET", "/api/board", b"")  # creates the default board
     if step != "step-01":
         seed_demo_cards(repository)
+    if step == "step-05":
+        seed_card_details(repository)
     server = create_server("127.0.0.1", 0, router)
     threading.Thread(target=server.serve_forever, daemon=True).start()
     host, port = server.server_address[:2]
