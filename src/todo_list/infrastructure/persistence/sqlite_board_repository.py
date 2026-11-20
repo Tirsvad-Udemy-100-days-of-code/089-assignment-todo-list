@@ -39,16 +39,29 @@ CREATE TABLE IF NOT EXISTS comments (
 """
 
 # Columns added to cards after the first release; older files get them on open.
-_CARD_DETAIL_COLUMNS = {
-    "label": "TEXT NOT NULL DEFAULT ''",
-    "description": "TEXT NOT NULL DEFAULT ''",
-    "due_date": "TEXT",
-    "done": "INTEGER NOT NULL DEFAULT 0",
-}
+_ADD_CARD_DETAIL_COLUMNS = (
+    ("label", "ALTER TABLE cards ADD COLUMN label TEXT NOT NULL DEFAULT ''"),
+    (
+        "description",
+        "ALTER TABLE cards ADD COLUMN description TEXT NOT NULL DEFAULT ''",
+    ),
+    ("due_date", "ALTER TABLE cards ADD COLUMN due_date TEXT"),
+    ("done", "ALTER TABLE cards ADD COLUMN done INTEGER NOT NULL DEFAULT 0"),
+)
 
-_CARD_SELECT = (
+# Must equal constants.SCHEMA_VERSION; a unit test checks it.
+_SET_SCHEMA_VERSION_SQL = "PRAGMA user_version = 1"
+
+_CARDS_OF_LIST_SQL = (
     "SELECT id, list_id, title, position, label, description, due_date, done, "
     "(SELECT COUNT(*) FROM comments WHERE comments.card_id = cards.id) FROM cards "
+    "WHERE list_id = ? ORDER BY position"
+)
+
+_CARD_BY_ID_SQL = (
+    "SELECT id, list_id, title, position, label, description, due_date, done, "
+    "(SELECT COUNT(*) FROM comments WHERE comments.card_id = cards.id) FROM cards "
+    "WHERE id = ?"
 )
 
 
@@ -99,10 +112,7 @@ class SqliteBoardRepository:
     def cards_of(self, list_id: int) -> list[Card]:
         """@brief Return the cards of a list, top to bottom."""
         with self._transaction() as connection:
-            rows = connection.execute(
-                _CARD_SELECT + "WHERE list_id = ? ORDER BY position",
-                (list_id,),
-            ).fetchall()
+            rows = connection.execute(_CARDS_OF_LIST_SQL, (list_id,)).fetchall()
         return [_card_from_row(row) for row in rows]
 
     def add_list(self, board_id: int, name: str) -> CardList:
@@ -260,7 +270,7 @@ def _read_list(connection: sqlite3.Connection, list_id: int) -> CardList:
 
 
 def _read_card(connection: sqlite3.Connection, card_id: int) -> Card:
-    row = connection.execute(_CARD_SELECT + "WHERE id = ?", (card_id,)).fetchone()
+    row = connection.execute(_CARD_BY_ID_SQL, (card_id,)).fetchone()
     if row is None:
         raise NotFoundError(f"No such card: {card_id}")
     return _card_from_row(row)
@@ -278,10 +288,10 @@ def _migrate(connection: sqlite3.Connection) -> None:
     if version >= constants.SCHEMA_VERSION:
         return
     existing = {row[1] for row in connection.execute("PRAGMA table_info(cards)")}
-    for column, definition in _CARD_DETAIL_COLUMNS.items():
+    for column, statement in _ADD_CARD_DETAIL_COLUMNS:
         if column not in existing:
-            connection.execute(f"ALTER TABLE cards ADD COLUMN {column} {definition}")
-    connection.execute(f"PRAGMA user_version = {int(constants.SCHEMA_VERSION)}")
+            connection.execute(statement)
+    connection.execute(_SET_SCHEMA_VERSION_SQL)
 
 
 def _list_ids(connection: sqlite3.Connection, board_id: int) -> list[int]:

@@ -5,7 +5,9 @@ from pathlib import Path
 
 import pytest
 
+from todo_list import constants
 from todo_list.domain.errors.board_errors import NotFoundError
+from todo_list.infrastructure.persistence import sqlite_board_repository
 from todo_list.infrastructure.persistence.sqlite_board_repository import (
     SqliteBoardRepository,
 )
@@ -107,3 +109,9 @@ def test_unknown_ids_raise_not_found(repository: SqliteBoardRepository) -> None:
         repository.comments_of(99)
     with pytest.raises(NotFoundError):
         repository.delete_comment(99)
+
+
+def test_schema_version_sql_matches_constant() -> None:
+    assert f"PRAGMA user_version = {constants.SCHEMA_VERSION}" == (
+        sqlite_board_repository._SET_SCHEMA_VERSION_SQL
+    )
