@@ -12,7 +12,7 @@
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
 | 2026-11-20 | Deprecated | Jens Tirsvad Nielsen | S01 | Initial version | [a3a64c5] |
-| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Reworded the wording constraint | pending |
+| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Reworded the wording constraint | [a5a3feb] |
 
 ---
 
@@ -189,3 +189,4 @@ Proceed.
 
 [SA-001]: ./stakeholder-analysis.md
 [a3a64c5]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/089-assignment-todo-list/commit/a3a64c5ad7831b1e3ad88ecf9902ebcf6f2f0d16
+[a5a3feb]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/089-assignment-todo-list/commit/a5a3febbe1ac3eccfa6c86701a103aabdf71fc1b
