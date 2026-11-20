@@ -74,15 +74,59 @@ function inlineForm(node, initial, buttonText, onSubmit, label) {
   input.select();
 }
 
+const LABELS = ["red", "orange", "yellow", "green", "blue", "purple"];
+
+/** True when the due date is before today and the card is not done. */
+function isOverdue(card) {
+  if (!card.due_date || card.done) {
+    return false;
+  }
+  const now = new Date();
+  const today = [
+    now.getFullYear(),
+    String(now.getMonth() + 1).padStart(2, "0"),
+    String(now.getDate()).padStart(2, "0"),
+  ].join("-");
+  return card.due_date < today;
+}
+
+function renderBadges(card) {
+  const badges = element("div", "badges");
+  if (card.due_date) {
+    badges.append(element("span", "badge due", `\u{1F4C5} ${card.due_date}`));
+  }
+  if (card.description) {
+    const icon = element("span", "badge description", "≡");
+    icon.title = "Has a description";
+    badges.append(icon);
+  }
+  if (card.comment_count > 0) {
+    badges.append(element("span", "badge comments", `\u{1F4AC} ${card.comment_count}`));
+  }
+  return badges;
+}
+
 function renderCard(card) {
   const node = element("div", "card");
   node.draggable = true;
   node.dataset.cardId = String(card.id);
+  node.classList.toggle("done", card.done);
+  node.classList.toggle("overdue", isOverdue(card));
   node.addEventListener("dragstart", (event) => startDrag(event, "card", card.id, node));
   node.addEventListener("dragend", endDrag);
+  node.addEventListener("click", (event) => {
+    if (event.target.closest(".card-body")) {
+      openDetails(card.id);
+    }
+  });
+  const body = element("div", "card-body");
+  if (card.label) {
+    body.append(element("div", `label-bar label-${card.label}`));
+  }
   const title = element("span", "card-title", card.title);
+  body.append(title, renderBadges(card));
   node.append(
-    title,
+    body,
     iconButton(`Rename card ${card.title}`, "✎", () =>
       inlineForm(title, card.title, "Save", (value) =>
         act(() => request("PATCH", `/api/cards/${card.id}`, { title: value })), "Card title")),
@@ -90,6 +134,124 @@ function renderCard(card) {
       act(() => request("DELETE", `/api/cards/${card.id}`))),
   );
   return node;
+}
+
+/** Labelled form field. */
+function field(labelText, control) {
+  const wrapper = element("label", "field");
+  wrapper.append(element("span", "", labelText), control);
+  return wrapper;
+}
+
+function renderComments(list, card, reload) {
+  list.replaceChildren();
+  for (const comment of card.comments) {
+    const item = element("li", "comment");
+    item.append(
+      element("span", "comment-text", comment.text),
+      element("time", "comment-time", comment.created_at),
+      iconButton("Delete comment", "✕", async () => {
+        await request("DELETE", `/api/comments/${comment.id}`);
+        await reload();
+        act(async () => {});
+      }),
+    );
+    list.append(item);
+  }
+}
+
+/** Open the native dialog with the details of one card. */
+async function openDetails(cardId) {
+  let card;
+  try {
+    card = await request("GET", `/api/cards/${cardId}`);
+  } catch (error) {
+    showError(error.message);
+    return;
+  }
+  const dialog = element("dialog", "details");
+  const form = element("form", "details-form");
+  const title = element("input");
+  title.value = card.title;
+  const label = element("select");
+  for (const name of ["", ...LABELS]) {
+    const option = element("option", "", name || "none");
+    option.value = name;
+    label.append(option);
+  }
+  label.value = card.label || "";
+  const description = element("textarea");
+  description.rows = 4;
+  description.value = card.description || "";
+  const due = element("input");
+  due.type = "date";
+  due.value = card.due_date || "";
+  const done = element("input");
+  done.type = "checkbox";
+  done.checked = card.done;
+  const message = element("div", "dialog-error");
+  message.setAttribute("role", "alert");
+  const save = element("button", "", "Save");
+  save.type = "submit";
+  const close = element("button", "", "Close");
+  close.type = "button";
+  close.addEventListener("click", () => dialog.close());
+  const actions = element("div", "dialog-actions");
+  actions.append(save, close);
+  form.append(
+    element("h2", "", "Card details"),
+    field("Title", title),
+    field("Label", label),
+    field("Description", description),
+    field("Due date", due),
+    field("Done", done),
+    message,
+    actions,
+  );
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    try {
+      await request("PATCH", `/api/cards/${cardId}`, {
+        title: title.value,
+        label: label.value,
+        description: description.value,
+        due_date: due.value || null,
+        done: done.checked,
+      });
+      dialog.close();
+      act(async () => {});
+    } catch (error) {
+      message.textContent = error.message;
+    }
+  });
+  const comments = element("ul", "comments");
+  const reload = async () => {
+    card = await request("GET", `/api/cards/${cardId}`);
+    renderComments(comments, card, reload);
+  };
+  renderComments(comments, card, reload);
+  const commentForm = element("form", "comment-form");
+  const commentInput = element("input");
+  commentInput.setAttribute("aria-label", "New comment");
+  const commentAdd = element("button", "", "Comment");
+  commentAdd.type = "submit";
+  commentForm.append(commentInput, commentAdd);
+  commentForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    try {
+      await request("POST", `/api/cards/${cardId}/comments`, { text: commentInput.value });
+      commentInput.value = "";
+      message.textContent = "";
+      await reload();
+      act(async () => {});
+    } catch (error) {
+      message.textContent = error.message;
+    }
+  });
+  dialog.append(form, element("h3", "", "Comments"), comments, commentForm);
+  dialog.addEventListener("close", () => dialog.remove());
+  document.body.append(dialog);
+  dialog.showModal();
 }
 
 function renderList(list) {
