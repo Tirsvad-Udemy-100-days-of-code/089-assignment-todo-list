@@ -4,10 +4,13 @@ import sqlite3
 from collections.abc import Iterator
 from contextlib import closing, contextmanager
 from pathlib import Path
+from typing import Any
 
+from todo_list import constants
 from todo_list.domain.entities.board import Board
 from todo_list.domain.entities.card import Card
 from todo_list.domain.entities.card_list import CardList
+from todo_list.domain.entities.comment import Comment
 from todo_list.domain.errors.board_errors import NotFoundError
 
 _SCHEMA = """
@@ -27,7 +30,39 @@ CREATE TABLE IF NOT EXISTS cards (
     title TEXT NOT NULL,
     position INTEGER NOT NULL
 );
+CREATE TABLE IF NOT EXISTS comments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    card_id INTEGER NOT NULL REFERENCES cards(id) ON DELETE CASCADE,
+    text TEXT NOT NULL,
+    created_at TEXT NOT NULL
+);
 """
+
+# Columns added to cards after the first release; older files get them on open.
+_ADD_CARD_DETAIL_COLUMNS = (
+    ("label", "ALTER TABLE cards ADD COLUMN label TEXT NOT NULL DEFAULT ''"),
+    (
+        "description",
+        "ALTER TABLE cards ADD COLUMN description TEXT NOT NULL DEFAULT ''",
+    ),
+    ("due_date", "ALTER TABLE cards ADD COLUMN due_date TEXT"),
+    ("done", "ALTER TABLE cards ADD COLUMN done INTEGER NOT NULL DEFAULT 0"),
+)
+
+# Must equal constants.SCHEMA_VERSION; a unit test checks it.
+_SET_SCHEMA_VERSION_SQL = "PRAGMA user_version = 1"
+
+_CARDS_OF_LIST_SQL = (
+    "SELECT id, list_id, title, position, label, description, due_date, done, "
+    "(SELECT COUNT(*) FROM comments WHERE comments.card_id = cards.id) FROM cards "
+    "WHERE list_id = ? ORDER BY position"
+)
+
+_CARD_BY_ID_SQL = (
+    "SELECT id, list_id, title, position, label, description, due_date, done, "
+    "(SELECT COUNT(*) FROM comments WHERE comments.card_id = cards.id) FROM cards "
+    "WHERE id = ?"
+)
 
 
 class SqliteBoardRepository:
@@ -41,6 +76,7 @@ class SqliteBoardRepository:
         self._path = database_path
         with self._transaction() as connection:
             connection.executescript(_SCHEMA)
+            _migrate(connection)
 
     @contextmanager
     def _transaction(self) -> Iterator[sqlite3.Connection]:
@@ -76,12 +112,8 @@ class SqliteBoardRepository:
     def cards_of(self, list_id: int) -> list[Card]:
         """@brief Return the cards of a list, top to bottom."""
         with self._transaction() as connection:
-            rows = connection.execute(
-                "SELECT id, list_id, title, position FROM cards "
-                "WHERE list_id = ? ORDER BY position",
-                (list_id,),
-            ).fetchall()
-        return [Card(*row) for row in rows]
+            rows = connection.execute(_CARDS_OF_LIST_SQL, (list_id,)).fetchall()
+        return [_card_from_row(row) for row in rows]
 
     def add_list(self, board_id: int, name: str) -> CardList:
         """@brief Add a list at the right end of a board."""
@@ -150,6 +182,56 @@ class SqliteBoardRepository:
             connection.execute("DELETE FROM cards WHERE id = ?", (card_id,))
             _renumber_cards(connection, list_id, _card_ids(connection, list_id))
 
+    def get_card(self, card_id: int) -> Card:
+        """@brief Return one card."""
+        with self._transaction() as connection:
+            return _read_card(connection, card_id)
+
+    def update_card_details(
+        self,
+        card_id: int,
+        label: str,
+        description: str,
+        due_date: str | None,
+        done: bool,
+    ) -> Card:
+        """@brief Replace the label, description, due date and done state."""
+        with self._transaction() as connection:
+            _require(connection, "SELECT 1 FROM cards WHERE id = ?", card_id)
+            connection.execute(
+                "UPDATE cards SET label = ?, description = ?, due_date = ?, done = ? "
+                "WHERE id = ?",
+                (label, description, due_date, int(done), card_id),
+            )
+            return _read_card(connection, card_id)
+
+    def add_comment(self, card_id: int, text: str, created_at: str) -> Comment:
+        """@brief Add a comment to a card."""
+        with self._transaction() as connection:
+            _require(connection, "SELECT 1 FROM cards WHERE id = ?", card_id)
+            cursor = connection.execute(
+                "INSERT INTO comments (card_id, text, created_at) VALUES (?, ?, ?)",
+                (card_id, text, created_at),
+            )
+        return Comment(_row_id(cursor), card_id, text, created_at)
+
+    def comments_of(self, card_id: int) -> list[Comment]:
+        """@brief Return the comments of a card, oldest first."""
+        with self._transaction() as connection:
+            _require(connection, "SELECT 1 FROM cards WHERE id = ?", card_id)
+            rows = connection.execute(
+                "SELECT id, card_id, text, created_at FROM comments "
+                "WHERE card_id = ? ORDER BY id",
+                (card_id,),
+            ).fetchall()
+        return [Comment(*row) for row in rows]
+
+    def delete_comment(self, comment_id: int) -> None:
+        """@brief Delete a comment."""
+        with self._transaction() as connection:
+            _require(connection, "SELECT 1 FROM comments WHERE id = ?", comment_id)
+            connection.execute("DELETE FROM comments WHERE id = ?", (comment_id,))
+
     def move_card(self, card_id: int, list_id: int, position: int) -> Card:
         """@brief Move a card to a position in a list, possibly another list."""
         with self._transaction() as connection:
@@ -188,12 +270,28 @@ def _read_list(connection: sqlite3.Connection, list_id: int) -> CardList:
 
 
 def _read_card(connection: sqlite3.Connection, card_id: int) -> Card:
-    row = connection.execute(
-        "SELECT id, list_id, title, position FROM cards WHERE id = ?", (card_id,)
-    ).fetchone()
+    row = connection.execute(_CARD_BY_ID_SQL, (card_id,)).fetchone()
     if row is None:
         raise NotFoundError(f"No such card: {card_id}")
-    return Card(*row)
+    return _card_from_row(row)
+
+
+def _card_from_row(row: tuple[Any, ...]) -> Card:
+    return Card(
+        row[0], row[1], row[2], row[3], row[4], row[5], row[6], bool(row[7]), row[8]
+    )
+
+
+def _migrate(connection: sqlite3.Connection) -> None:
+    """Bring a database file written by an older version up to the current schema."""
+    version = connection.execute("PRAGMA user_version").fetchone()[0]
+    if version >= constants.SCHEMA_VERSION:
+        return
+    existing = {row[1] for row in connection.execute("PRAGMA table_info(cards)")}
+    for column, statement in _ADD_CARD_DETAIL_COLUMNS:
+        if column not in existing:
+            connection.execute(statement)
+    connection.execute(_SET_SCHEMA_VERSION_SQL)
 
 
 def _list_ids(connection: sqlite3.Connection, board_id: int) -> list[int]:

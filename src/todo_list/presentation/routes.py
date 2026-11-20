@@ -27,7 +27,10 @@ def build_router(
     router.add("PATCH", "/api/lists/{id}/move", lists.move_list)
     router.add("DELETE", "/api/lists/{id}", lists.delete_list)
     router.add("POST", "/api/lists/{id}/cards", cards.create_card)
-    router.add("PATCH", "/api/cards/{id}", cards.rename_card)
+    router.add("GET", "/api/cards/{id}", cards.get_card)
+    router.add("PATCH", "/api/cards/{id}", cards.update_card)
+    router.add("POST", "/api/cards/{id}/comments", cards.add_comment)
+    router.add("DELETE", "/api/comments/{id}", cards.delete_comment)
     router.add("PATCH", "/api/cards/{id}/move", cards.move_card)
     router.add("DELETE", "/api/cards/{id}", cards.delete_card)
     return router

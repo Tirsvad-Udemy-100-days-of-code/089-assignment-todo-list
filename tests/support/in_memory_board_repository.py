@@ -5,6 +5,7 @@ from dataclasses import replace
 from todo_list.domain.entities.board import Board
 from todo_list.domain.entities.card import Card
 from todo_list.domain.entities.card_list import CardList
+from todo_list.domain.entities.comment import Comment
 from todo_list.domain.errors.board_errors import NotFoundError
 
 
@@ -16,6 +17,7 @@ class InMemoryBoardRepository:
         self._boards: dict[int, Board] = {}
         self._lists: dict[int, CardList] = {}
         self._cards: dict[int, Card] = {}
+        self._comments: dict[int, Comment] = {}
         self._next_id = 1
 
     def _new_id(self) -> int:
@@ -40,8 +42,58 @@ class InMemoryBoardRepository:
 
     def cards_of(self, list_id: int) -> list[Card]:
         """@brief Return the cards of a list in order."""
-        cards = [item for item in self._cards.values() if item.list_id == list_id]
+        cards = [
+            self._counted(item)
+            for item in self._cards.values()
+            if item.list_id == list_id
+        ]
         return sorted(cards, key=lambda item: item.position)
+
+    def _counted(self, card: Card) -> Card:
+        count = sum(1 for item in self._comments.values() if item.card_id == card.id)
+        return replace(card, comment_count=count)
+
+    def get_card(self, card_id: int) -> Card:
+        """@brief Return one card."""
+        return self._counted(self._get_card(card_id))
+
+    def update_card_details(
+        self,
+        card_id: int,
+        label: str,
+        description: str,
+        due_date: str | None,
+        done: bool,
+    ) -> Card:
+        """@brief Replace the details of a card."""
+        card = replace(
+            self._get_card(card_id),
+            label=label,
+            description=description,
+            due_date=due_date,
+            done=done,
+        )
+        self._cards[card_id] = card
+        return self._counted(card)
+
+    def add_comment(self, card_id: int, text: str, created_at: str) -> Comment:
+        """@brief Add a comment."""
+        self._get_card(card_id)
+        comment = Comment(self._new_id(), card_id, text, created_at)
+        self._comments[comment.id] = comment
+        return comment
+
+    def comments_of(self, card_id: int) -> list[Comment]:
+        """@brief Return the comments of a card, oldest first."""
+        self._get_card(card_id)
+        found = [item for item in self._comments.values() if item.card_id == card_id]
+        return sorted(found, key=lambda item: item.id)
+
+    def delete_comment(self, comment_id: int) -> None:
+        """@brief Delete a comment."""
+        if comment_id not in self._comments:
+            raise NotFoundError(str(comment_id))
+        del self._comments[comment_id]
 
     def add_list(self, board_id: int, name: str) -> CardList:
         """@brief Add a list at the end."""
@@ -61,6 +113,7 @@ class InMemoryBoardRepository:
         """@brief Delete a list and its cards."""
         board_id = self._get_list(list_id).board_id
         for card in self.cards_of(list_id):
+            self._drop_comments(card.id)
             del self._cards[card.id]
         del self._lists[list_id]
         for position, item in enumerate(self.lists_of(board_id)):
@@ -86,11 +139,12 @@ class InMemoryBoardRepository:
         """@brief Rename a card."""
         card = replace(self._get_card(card_id), title=title)
         self._cards[card_id] = card
-        return card
+        return self._counted(card)
 
     def delete_card(self, card_id: int) -> None:
         """@brief Delete a card."""
         list_id = self._get_card(card_id).list_id
+        self._drop_comments(card_id)
         del self._cards[card_id]
         for position, card in enumerate(self.cards_of(list_id)):
             self._cards[card.id] = replace(card, position=position)
@@ -105,7 +159,11 @@ class InMemoryBoardRepository:
             self._cards[card.id] = replace(card, list_id=list_id, position=index)
         for index, card in enumerate(self.cards_of(source_id)):
             self._cards[card.id] = replace(card, position=index)
-        return self._cards[card_id]
+        return self._counted(self._cards[card_id])
+
+    def _drop_comments(self, card_id: int) -> None:
+        for comment in self.comments_of(card_id):
+            del self._comments[comment.id]
 
     def _get_list(self, list_id: int) -> CardList:
         if list_id not in self._lists:

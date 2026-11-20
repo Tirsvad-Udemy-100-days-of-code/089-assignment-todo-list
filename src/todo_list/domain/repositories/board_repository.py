@@ -5,6 +5,7 @@ from typing import Protocol
 from todo_list.domain.entities.board import Board
 from todo_list.domain.entities.card import Card
 from todo_list.domain.entities.card_list import CardList
+from todo_list.domain.entities.comment import Comment
 
 
 class BoardRepository(Protocol):
@@ -60,4 +61,31 @@ class BoardRepository(Protocol):
 
     def move_card(self, card_id: int, list_id: int, position: int) -> Card:
         """@brief Move a card to a position in a list, possibly another list."""
+        ...
+
+    def get_card(self, card_id: int) -> Card:
+        """@brief Return one card."""
+        ...
+
+    def update_card_details(
+        self,
+        card_id: int,
+        label: str,
+        description: str,
+        due_date: str | None,
+        done: bool,
+    ) -> Card:
+        """@brief Replace the label, description, due date and done state."""
+        ...
+
+    def add_comment(self, card_id: int, text: str, created_at: str) -> Comment:
+        """@brief Add a comment to a card."""
+        ...
+
+    def comments_of(self, card_id: int) -> list[Comment]:
+        """@brief Return the comments of a card, oldest first."""
+        ...
+
+    def delete_comment(self, comment_id: int) -> None:
+        """@brief Delete a comment."""
         ...

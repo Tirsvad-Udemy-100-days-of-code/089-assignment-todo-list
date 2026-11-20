@@ -76,3 +76,31 @@ FIELD_POSITION = "position"
 
 ## @brief Largest request body the server reads, in bytes.
 MAX_BODY_BYTES = 65536
+
+## @brief The label colours a card may have; an empty label means none.
+LABEL_COLOURS = ("red", "orange", "yellow", "green", "blue", "purple")
+
+## @brief Longest card description, in characters.
+MAX_DESCRIPTION_LENGTH = 2000
+
+## @brief Longest comment, in characters.
+MAX_COMMENT_LENGTH = 500
+
+## @brief Messages shown when a card detail is not valid.
+ERROR_LABEL_INVALID = "The label must be empty or one of: " + ", ".join(LABEL_COLOURS)
+ERROR_DESCRIPTION_TOO_LONG = "A description must be at most 2000 characters."
+ERROR_DUE_DATE_INVALID = "The due date must be a date written as YYYY-MM-DD."
+ERROR_COMMENT_EMPTY = "A comment must not be empty."
+ERROR_COMMENT_TOO_LONG = "A comment must be at most 500 characters."
+ERROR_NO_CHANGES = "The request changes nothing: give at least one field."
+
+## @brief JSON fields of the card detail requests.
+FIELD_TITLE = "title"
+FIELD_LABEL = "label"
+FIELD_DESCRIPTION = "description"
+FIELD_DUE_DATE = "due_date"
+FIELD_DONE = "done"
+FIELD_TEXT = "text"
+
+## @brief Schema version written to PRAGMA user_version once the card details exist.
+SCHEMA_VERSION = 1

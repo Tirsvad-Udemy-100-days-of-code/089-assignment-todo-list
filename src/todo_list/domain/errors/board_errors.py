@@ -7,3 +7,7 @@ class InvalidNameError(ValueError):
 
 class NotFoundError(LookupError):
     """@brief A board, list or card does not exist."""
+
+
+class InvalidDetailError(ValueError):
+    """@brief A label, description, due date or comment is not valid."""
