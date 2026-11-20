@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" width="960" height="420" role="img" aria-label="Wireframe of the Kanban board">
+<title>Wireframe of the board: five lists with cards and an Add a card control</title>
+<rect width="960" height="420" fill="#0079bf"/>
+<text x="24" y="34" font-family="sans-serif" font-size="20" font-weight="bold" fill="#fff">Todo List</text>
+<rect x="20" y="56" width="176" height="188" rx="6" fill="#ebecf0"/>
+<text x="32" y="80" font-family="sans-serif" font-size="13" font-weight="bold" fill="#172b4d">Backlog</text>
+<text x="170" y="80" font-family="sans-serif" font-size="13" fill="#5e6c84">✎ ✕</text>
+<rect x="28" y="92" width="160" height="34" rx="4" fill="#fff" stroke="#c1c7d0"/>
+<text x="38" y="114" font-family="sans-serif" font-size="12" fill="#172b4d">Task one</text>
+<rect x="28" y="136" width="160" height="34" rx="4" fill="#fff" stroke="#c1c7d0"/>
+<text x="38" y="158" font-family="sans-serif" font-size="12" fill="#172b4d">Task two</text>
+<text x="34" y="196" font-family="sans-serif" font-size="12" fill="#5e6c84">+ Add a card</text>
+<rect x="208" y="56" width="176" height="232" rx="6" fill="#ebecf0"/>
+<text x="220" y="80" font-family="sans-serif" font-size="13" font-weight="bold" fill="#172b4d">To Do</text>
+<text x="358" y="80" font-family="sans-serif" font-size="13" fill="#5e6c84">✎ ✕</text>
+<rect x="216" y="92" width="160" height="34" rx="4" fill="#fff" stroke="#c1c7d0"/>
+<text x="226" y="114" font-family="sans-serif" font-size="12" fill="#172b4d">Task three</text>
+<rect x="216" y="136" width="160" height="34" rx="4" fill="#fff" stroke="#c1c7d0"/>
+<text x="226" y="158" font-family="sans-serif" font-size="12" fill="#172b4d">Task four</text>
+<rect x="216" y="180" width="160" height="34" rx="4" fill="#fff" stroke="#c1c7d0"/>
+<text x="226" y="202" font-family="sans-serif" font-size="12" fill="#172b4d">Task five</text>
+<text x="222" y="240" font-family="sans-serif" font-size="12" fill="#5e6c84">+ Add a card</text>
+<rect x="396" y="56" width="176" height="144" rx="6" fill="#ebecf0"/>
+<text x="408" y="80" font-family="sans-serif" font-size="13" font-weight="bold" fill="#172b4d">In Progress</text>
+<text x="546" y="80" font-family="sans-serif" font-size="13" fill="#5e6c84">✎ ✕</text>
+<rect x="404" y="92" width="160" height="34" rx="4" fill="#fff" stroke="#c1c7d0"/>
+<text x="414" y="114" font-family="sans-serif" font-size="12" fill="#172b4d">Task six</text>
+<text x="410" y="152" font-family="sans-serif" font-size="12" fill="#5e6c84">+ Add a card</text>
+<rect x="584" y="56" width="176" height="188" rx="6" fill="#ebecf0"/>
+<text x="596" y="80" font-family="sans-serif" font-size="13" font-weight="bold" fill="#172b4d">Review</text>
+<text x="734" y="80" font-family="sans-serif" font-size="13" fill="#5e6c84">✎ ✕</text>
+<rect x="592" y="92" width="160" height="34" rx="4" fill="#fff" stroke="#c1c7d0"/>
+<text x="602" y="114" font-family="sans-serif" font-size="12" fill="#172b4d">Task seven</text>
+<rect x="592" y="136" width="160" height="34" rx="4" fill="#fff" stroke="#c1c7d0"/>
+<text x="602" y="158" font-family="sans-serif" font-size="12" fill="#172b4d">Task eight</text>
+<text x="598" y="196" font-family="sans-serif" font-size="12" fill="#5e6c84">+ Add a card</text>
+<rect x="772" y="56" width="176" height="144" rx="6" fill="#ebecf0"/>
+<text x="784" y="80" font-family="sans-serif" font-size="13" font-weight="bold" fill="#172b4d">Done</text>
+<text x="922" y="80" font-family="sans-serif" font-size="13" fill="#5e6c84">✎ ✕</text>
+<rect x="780" y="92" width="160" height="34" rx="4" fill="#fff" stroke="#c1c7d0"/>
+<text x="790" y="114" font-family="sans-serif" font-size="12" fill="#172b4d">Task nine</text>
+<text x="786" y="152" font-family="sans-serif" font-size="12" fill="#5e6c84">+ Add a card</text>
+</svg>

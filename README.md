@@ -76,6 +76,7 @@ The page uses a JSON API under `/api/` (board, lists, cards); the routes are lis
 | 1. Project foundation | The first page with the five empty lists ![Step 1](docs/screenshots/step-01.png) |
 | 2. Domain and storage | The board read from SQLite with sample cards ![Step 2](docs/screenshots/step-02.png) |
 | 3. JSON API and editing | A new list and a card form, added through the page ![Step 3](docs/screenshots/step-03.png) |
+| 4. Kanban board and drag and drop | A card dragged from To Do to Review ![Step 4](docs/screenshots/step-04.png) |
 
 Screenshots are made in a Docker container, never on the desktop:
 

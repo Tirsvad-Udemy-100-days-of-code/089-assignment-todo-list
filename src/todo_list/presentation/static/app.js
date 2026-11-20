@@ -76,6 +76,10 @@ function inlineForm(node, initial, buttonText, onSubmit, label) {
 
 function renderCard(card) {
   const node = element("div", "card");
+  node.draggable = true;
+  node.dataset.cardId = String(card.id);
+  node.addEventListener("dragstart", (event) => startDrag(event, "card", card.id, node));
+  node.addEventListener("dragend", endDrag);
   const title = element("span", "card-title", card.title);
   node.append(
     title,
@@ -90,7 +94,14 @@ function renderCard(card) {
 
 function renderList(list) {
   const section = element("section", "list");
+  section.dataset.listId = String(list.id);
+  section.addEventListener("dragover", (event) => overList(event, section));
+  section.addEventListener("dragleave", () => section.classList.remove("drop-target"));
+  section.addEventListener("drop", (event) => dropOnList(event, list.id, section));
   const header = element("div", "list-header");
+  header.draggable = true;
+  header.addEventListener("dragstart", (event) => startDrag(event, "list", list.id, section));
+  header.addEventListener("dragend", endDrag);
   const title = element("h2", "", list.name);
   header.append(
     title,
@@ -124,9 +135,81 @@ function renderAddList() {
   return box;
 }
 
+/** Drag and drop with the browser's native events. */
+const drag = { kind: null, id: null };
+
+function startDrag(event, kind, id, node) {
+  event.stopPropagation();
+  drag.kind = kind;
+  drag.id = id;
+  event.dataTransfer.effectAllowed = "move";
+  event.dataTransfer.setData("text/plain", `${kind}:${id}`);
+  requestAnimationFrame(() => node.classList.add("dragging"));
+}
+
+function endDrag() {
+  drag.kind = null;
+  drag.id = null;
+  document.querySelectorAll(".dragging, .drop-target").forEach((node) =>
+    node.classList.remove("dragging", "drop-target"));
+}
+
+/** Number of items whose centre is before the pointer, not counting the dragged one. */
+function insertIndex(container, selector, pointer, vertical) {
+  let index = 0;
+  for (const item of container.querySelectorAll(selector)) {
+    if (item.classList.contains("dragging")) {
+      continue;
+    }
+    const box = item.getBoundingClientRect();
+    const centre = vertical ? box.top + box.height / 2 : box.left + box.width / 2;
+    if (centre < pointer) {
+      index += 1;
+    }
+  }
+  return index;
+}
+
+function overList(event, section) {
+  if (drag.kind === "card") {
+    event.preventDefault();
+    section.classList.add("drop-target");
+  }
+}
+
+function dropOnList(event, listId, section) {
+  if (drag.kind !== "card") {
+    return;
+  }
+  event.preventDefault();
+  const cardId = drag.id;
+  const position = insertIndex(section, ".card", event.clientY, true);
+  endDrag();
+  act(() => request("PATCH", `/api/cards/${cardId}/move`, { list_id: listId, position }));
+}
+
+function enableListDrop(main) {
+  main.addEventListener("dragover", (event) => {
+    if (drag.kind === "list") {
+      event.preventDefault();
+    }
+  });
+  main.addEventListener("drop", (event) => {
+    if (drag.kind !== "list") {
+      return;
+    }
+    event.preventDefault();
+    const listId = drag.id;
+    const position = insertIndex(main, ".list", event.clientX, false);
+    endDrag();
+    act(() => request("PATCH", `/api/lists/${listId}/move`, { position }));
+  });
+}
+
 function render() {
   const main = document.getElementById("board");
   main.replaceChildren(...state.board.lists.map(renderList), renderAddList());
 }
 
+enableListDrop(document.getElementById("board"));
 act(async () => {});

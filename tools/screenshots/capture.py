@@ -83,10 +83,25 @@ def step_03(page: Page, base_url: str) -> None:
     page.evaluate("document.getElementById('board').scrollLeft = 0")
 
 
+def step_04(page: Page, base_url: str) -> None:
+    """@brief Drag a card from To Do to Review and show the board afterwards."""
+    page.set_viewport_size({"width": 1700, "height": 720})
+    page.goto(base_url + "/")
+    page.wait_for_selector(".card")
+    card = page.locator(".card", has_text="Add the card dialog")
+    review = page.locator(".list", has=page.locator("h2:text-is('Review')"))
+    card.drag_to(review.locator(".card").first)
+    page.wait_for_selector(
+        ".list:has(h2:text-is('Review')) .card:has-text('Add the card dialog')"
+    )
+    page.evaluate("document.getElementById('board').scrollLeft = 0")
+
+
 SCENARIOS: dict[str, Callable[[Page, str], None]] = {
     "step-01": step_01,
     "step-02": step_02,
     "step-03": step_03,
+    "step-04": step_04,
 }
 
 

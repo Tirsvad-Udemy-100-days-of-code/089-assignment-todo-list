@@ -8,11 +8,13 @@ from todo_list.application.use_cases.board_use_cases import GetBoard
 from todo_list.application.use_cases.card_use_cases import (
     CreateCard,
     DeleteCard,
+    MoveCard,
     RenameCard,
 )
 from todo_list.application.use_cases.list_use_cases import (
     CreateList,
     DeleteList,
+    MoveList,
     RenameList,
 )
 from todo_list.infrastructure.persistence.sqlite_board_repository import (
@@ -36,10 +38,16 @@ def build_router_for(database_path: Path) -> Router:
     return build_router(
         BoardController(GetBoard(repository)),
         ListController(
-            CreateList(repository), RenameList(repository), DeleteList(repository)
+            CreateList(repository),
+            RenameList(repository),
+            DeleteList(repository),
+            MoveList(repository),
         ),
         CardController(
-            CreateCard(repository), RenameCard(repository), DeleteCard(repository)
+            CreateCard(repository),
+            RenameCard(repository),
+            DeleteCard(repository),
+            MoveCard(repository),
         ),
     )
 
