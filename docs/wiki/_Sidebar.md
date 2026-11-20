@@ -6,6 +6,7 @@
 - [Step 3: JSON API and editing](Step-3-Api-Editing)
 - [Step 4: Kanban board and drag and drop](Step-4-Kanban-Board)
 - [Step 5: Card details](Step-5-Card-Details)
+- [Step 6: Wrap-up and reflection](Step-6-Wrap-Up)
 
 **Languages**
 

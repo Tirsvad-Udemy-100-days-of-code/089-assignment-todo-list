@@ -11,3 +11,4 @@ A Trello-style Kanban board in Python 3.13 with the standard library, SQLite and
 - [Step 3: JSON API and editing](Step-3-Api-Editing): the API, the router and the editing controls.
 - [Step 4: Kanban board and drag and drop](Step-4-Kanban-Board): moving cards and lists.
 - [Step 5: Card details](Step-5-Card-Details): label, description, due date, done and comments.
+- [Step 6: Wrap-up and reflection](Step-6-Wrap-Up): the final checks and what we learned.
