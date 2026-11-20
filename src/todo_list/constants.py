@@ -45,3 +45,30 @@ MAX_NAME_LENGTH = 100
 ## @brief Messages shown when a name is not valid.
 ERROR_NAME_EMPTY = "A name must not be empty."
 ERROR_NAME_TOO_LONG = "A name must be at most 100 characters."
+
+## @brief Content types of the responses.
+CONTENT_TYPE_JSON = "application/json; charset=utf-8"
+CONTENT_TYPE_JS = "text/javascript; charset=utf-8"
+CONTENT_TYPE_CSS = "text/css; charset=utf-8"
+
+## @brief Status codes the API uses besides OK and not found.
+STATUS_CREATED = HTTPStatus.CREATED
+STATUS_NO_CONTENT = HTTPStatus.NO_CONTENT
+STATUS_BAD_REQUEST = HTTPStatus.BAD_REQUEST
+STATUS_METHOD_NOT_ALLOWED = HTTPStatus.METHOD_NOT_ALLOWED
+
+## @brief Static files served under /static/, with their content types.
+STATIC_ROUTE_PREFIX = "/static/"
+STATIC_FILES = {
+    "app.js": CONTENT_TYPE_JS,
+    "style.css": CONTENT_TYPE_CSS,
+}
+
+## @brief Messages of API errors.
+ERROR_INVALID_JSON = "The request body must be a JSON object."
+ERROR_FIELD_MISSING = "The field is missing or has the wrong type: "
+ERROR_NOT_FOUND = "Not found."
+ERROR_METHOD_NOT_ALLOWED = "Method not allowed."
+
+## @brief Largest request body the server reads, in bytes.
+MAX_BODY_BYTES = 65536
