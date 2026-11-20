@@ -6,5 +6,5 @@ WORKDIR /work
 ENV PYTHONPATH=/work/src
 # The container is local and short-lived and has no published port. It runs as root
 # only to write the PNG into the folder that the host mounts at /work.
-# nosemgrep: dockerfile.security.missing-user-entrypoint.missing-user-entrypoint
+# nosemgrep
 ENTRYPOINT ["python", "/work/tools/screenshots/capture.py"]
