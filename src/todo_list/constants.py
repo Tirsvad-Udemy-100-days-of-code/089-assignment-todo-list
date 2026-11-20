@@ -35,3 +35,13 @@ STATUS_OK = HTTPStatus.OK
 
 ## @brief Status code of an unknown path.
 STATUS_NOT_FOUND = HTTPStatus.NOT_FOUND
+
+## @brief Name of the board created on first start.
+DEFAULT_BOARD_NAME = "My Board"
+
+## @brief Longest name or title, in characters.
+MAX_NAME_LENGTH = 100
+
+## @brief Messages shown when a name is not valid.
+ERROR_NAME_EMPTY = "A name must not be empty."
+ERROR_NAME_TOO_LONG = "A name must be at most 100 characters."
