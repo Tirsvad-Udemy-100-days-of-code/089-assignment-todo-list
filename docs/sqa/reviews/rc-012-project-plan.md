@@ -3,13 +3,13 @@
 ## Metadata
 | Key | Value |
 | --- | --- |
-| ID | RC-003 |
+| ID | RC-012 |
 | CrossReference | [PP-001], [QC-PP-001], [QC-LANG-001] |
 
 ## Version History
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
-| 2026-11-20 | Proposed | Jens Tirsvad Nielsen | S01 | Review of PP-001 | [a3a64c5] |
+| 2026-11-20 | Proposed | Jens Tirsvad Nielsen | S01 | Review of PP-001 | [a5a3feb] |
 
 ---
 
@@ -59,7 +59,7 @@
 
 ## Overall Verdict
 
-Go — no Mandatory criterion fails; the only Fail is Optional and non-blocking. Reviewer is the stand-in for S01, not independent.
+Go (re-review after a wording change) — no Mandatory criterion fails; the only Fail is Optional and non-blocking. Reviewer is the stand-in for S01, not independent.
 
 ## Action Items
 
@@ -72,4 +72,4 @@ Go — no Mandatory criterion fails; the only Fail is Optional and non-blocking.
 [PP-001]: ../../project-plan.md
 [QC-PP-001]: ../../../framework/qc/artifacts/qc-project-plan.md
 [QC-LANG-001]: ../../../framework/qc/artifacts/qc-language-domain.md
-[a3a64c5]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/089-assignment-todo-list/commit/a3a64c5ad7831b1e3ad88ecf9902ebcf6f2f0d16
+[a5a3feb]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/089-assignment-todo-list/commit/a5a3febbe1ac3eccfa6c86701a103aabdf71fc1b

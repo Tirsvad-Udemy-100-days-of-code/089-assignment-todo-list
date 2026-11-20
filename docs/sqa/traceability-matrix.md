@@ -10,6 +10,7 @@
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
 | 2026-11-20 | Proposed | Jens Tirsvad Nielsen | S01 | Initial version | [a3a64c5] |
+| 2026-11-20 | Proposed | Jens Tirsvad Nielsen | S01 | Updated after the re-reviews RC-011 and RC-012 and the first ADR | [a5a3feb] |
 
 ---
 
@@ -23,9 +24,10 @@ updated whenever an artifact instance is created or reviewed.
 
 | Artifact Instance | Type | Language | Domain | Upstream (Backward Link) | Downstream (Forward Link) | Last Reviewed (RC-ID) |
 | --- | --- | --- | --- | --- | --- | --- |
-| [BC-001] | Business Case | en | it | - | SA-001, PP-001 | [RC-001] |
+| [BC-001] | Business Case | en | it | - | SA-001, PP-001 | [RC-011] |
 | [SA-001] | Stakeholder Analysis | en | it | BC-001 | PP-001 | [RC-002] |
-| [PP-001] | Project Plan | en | it | BC-001, SA-001 | MIL-001 to MIL-006 | [RC-003] |
+| [PP-001] | Project Plan | en | it | BC-001, SA-001 | MIL-001 to MIL-006 | [RC-012] |
+| [ADR-0001] | ADR | - | - | BC-001, SA-001 | - | [RC-010] |
 | [MIL-001] | Milestone | en | it | BC-001 | - | [RC-004] |
 | [MIL-002] | Milestone | en | it | BC-001 | - | [RC-005] |
 | [MIL-003] | Milestone | en | it | BC-001 | - | [RC-006] |
@@ -37,14 +39,14 @@ updated whenever an artifact instance is created or reviewed.
 
 | Concern (CN-ID) | Views that answer it | Decisions (ADR) | Quality check (TP) | Status |
 | --- | --- | --- | --- | --- |
-| CN-001 | - | ADR-0001 (planned) | - | Gap |
-| CN-002 | - | ADR-0001 (planned) | - | Gap |
-| CN-003 | - | ADR-0001 (planned) | - | Gap |
-| CN-004 | - | ADR-0001 (planned) | - | Gap |
-| CN-005 | - | ADR-0001 (planned) | - | Gap |
-| CN-006 | - | ADR-0001 (planned) | - | Gap |
-| CN-007 | - | ADR-0001 (planned) | - | Gap |
-| CN-008 | - | ADR-0001 (planned) | - | Gap |
+| CN-001 | - | ADR-0001 | - | Gap |
+| CN-002 | - | ADR-0001 | - | Gap |
+| CN-003 | - | ADR-0001 | - | Gap |
+| CN-004 | - | ADR-0001 | - | Gap |
+| CN-005 | - | ADR-0001 | - | Gap |
+| CN-006 | - | ADR-0001 | - | Gap |
+| CN-007 | - | [ADR-0001] | - | Covered |
+| CN-008 | - | ADR-0001 | - | Gap |
 
 ## Open Inconsistencies
 
@@ -68,9 +70,11 @@ updated whenever an artifact instance is created or reviewed.
 [MIL-004]: ../milestones/mil-004-kanban-board-ui.md
 [MIL-005]: ../milestones/mil-005-card-details.md
 [MIL-006]: ../milestones/mil-006-wiki-release.md
-[RC-001]: ./reviews/rc-001-business-case.md
+[RC-011]: ./reviews/rc-011-business-case.md
 [RC-002]: ./reviews/rc-002-stakeholder-analysis.md
-[RC-003]: ./reviews/rc-003-project-plan.md
+[RC-012]: ./reviews/rc-012-project-plan.md
+[RC-010]: ./reviews/rc-010-adr-0001.md
+[ADR-0001]: ../adr/adr-0001-standard-library-stack.md
 [RC-004]: ./reviews/rc-004-mil-001.md
 [RC-005]: ./reviews/rc-005-mil-002.md
 [RC-006]: ./reviews/rc-006-mil-003.md
@@ -78,3 +82,4 @@ updated whenever an artifact instance is created or reviewed.
 [RC-008]: ./reviews/rc-008-mil-005.md
 [RC-009]: ./reviews/rc-009-mil-006.md
 [a3a64c5]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/089-assignment-todo-list/commit/a3a64c5ad7831b1e3ad88ecf9902ebcf6f2f0d16
+[a5a3feb]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/089-assignment-todo-list/commit/a5a3febbe1ac3eccfa6c86701a103aabdf71fc1b

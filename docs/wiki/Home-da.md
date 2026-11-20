@@ -1,0 +1,9 @@
+[English](Home) · **Dansk** · [Bahasa Malaysia](Home-ms)
+
+# Todo List
+
+En Kanban-tavle i Trello-stil i Python 3.13 med standardbiblioteket, SQLite og almindelig JavaScript, bygget som dag 89 af kurset 100 Days of Code. Hvert byggetrin har et skærmbillede og en side om, hvad det lærte os.
+
+## Trin
+
+- [Trin 1: Projektets fundament](Step-1-Foundation-da): værktøjer, lag og den første side.

@@ -11,7 +11,8 @@
 ## Version History
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
-| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Initial version | [a3a64c5] |
+| 2026-11-20 | Deprecated | Jens Tirsvad Nielsen | S01 | Initial version | [a3a64c5] |
+| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Reworded the prompt-log open issue | [a5a3feb] |
 
 ---
 
@@ -90,7 +91,7 @@ the end date of 2026-12-04 is reported as at risk in the run summary.
 
 - No Domain Dictionary (`DICT`) or Governance document exists; the vocabulary is small and every owner is S01, so neither is needed at this size.
 - The PlantUML server setting in `docs/artifact-registry.md` is empty, so the Gantt chart is not rendered by the check script.
-- The framework's prompt-log folder `docs/ai-prompts/` carries a name the Product Owner forbids in artifacts; it is kept out of the repository through `.gitignore`.
+- The framework's session prompt-log folder is kept out of the repository through `.gitignore`, because the Product Owner's rule on wording applies to every artifact.
 - `requires-python` is set to 3.13 or newer; the installed interpreter is 3.13.14.
 - The dry-run output of `sync-project.sh` is the plan the Product Owner accepts; `--apply` runs after acceptance, because the publish workflow is not installed.
 
@@ -105,3 +106,4 @@ the end date of 2026-12-04 is reported as at risk in the run summary.
 [MIL-005]: ./milestones/mil-005-card-details.md
 [MIL-006]: ./milestones/mil-006-wiki-release.md
 [a3a64c5]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/089-assignment-todo-list/commit/a3a64c5ad7831b1e3ad88ecf9902ebcf6f2f0d16
+[a5a3feb]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/089-assignment-todo-list/commit/a5a3febbe1ac3eccfa6c86701a103aabdf71fc1b
