@@ -1,20 +1,22 @@
-"""Integration tests: a real server on a free port."""
+"""Integration tests: a real server on a free port with a real database file."""
 
 import threading
 import urllib.error
 import urllib.request
 from collections.abc import Iterator
+from pathlib import Path
 
 import pytest
 
 from todo_list import constants
-from todo_list.presentation.features.board.board_controller import BoardController
+from todo_list.main import build_board_controller
 from todo_list.presentation.http_server import create_server
 
 
 @pytest.fixture
-def base_url() -> Iterator[str]:
-    server = create_server("127.0.0.1", 0, BoardController())
+def base_url(tmp_path: Path) -> Iterator[str]:
+    controller = build_board_controller(tmp_path / "server.sqlite3")
+    server = create_server("127.0.0.1", 0, controller)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     host, port = server.server_address[:2]
