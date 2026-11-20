@@ -1,6 +1,7 @@
 """Integration tests of card details, comments and the schema migration."""
 
 import sqlite3
+from contextlib import closing
 from pathlib import Path
 
 import pytest
@@ -38,9 +39,8 @@ def repository(tmp_path: Path) -> SqliteBoardRepository:
 
 def test_old_database_is_migrated_and_keeps_its_cards(tmp_path: Path) -> None:
     path = tmp_path / "old.sqlite3"
-    with sqlite3.connect(path) as connection:
+    with closing(sqlite3.connect(path)) as connection:
         connection.executescript(_OLD_SCHEMA)
-    connection.close()
 
     repository = SqliteBoardRepository(path)
     card = repository.cards_of(1)[0]
@@ -94,7 +94,7 @@ def test_deleting_a_card_or_list_deletes_its_comments(
     repository.delete_card(card.id)
     repository.delete_list(1)
 
-    with sqlite3.connect(repository._path) as connection:
+    with closing(sqlite3.connect(repository._path)) as connection:
         assert connection.execute("SELECT COUNT(*) FROM comments").fetchone()[0] == 0
 
 
