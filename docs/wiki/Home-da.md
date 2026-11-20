@@ -7,3 +7,4 @@ En Kanban-tavle i Trello-stil i Python 3.13 med standardbiblioteket, SQLite og a
 ## Trin
 
 - [Trin 1: Projektets fundament](Step-1-Foundation-da): værktøjer, lag og den første side.
+- [Trin 2: Domæne og lager](Step-2-Domain-Storage-da): tavlens regler, SQLite og tavlesiden.
