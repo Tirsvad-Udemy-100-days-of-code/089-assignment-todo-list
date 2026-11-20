@@ -72,6 +72,7 @@ Then open <http://127.0.0.1:8000/> in a browser. Stop the server with `Ctrl+C`. 
 | Step | What it shows |
 | --- | --- |
 | 1. Project foundation | The first page with the five empty lists ![Step 1](docs/screenshots/step-01.png) |
+| 2. Domain and storage | The board read from SQLite with sample cards ![Step 2](docs/screenshots/step-02.png) |
 
 Screenshots are made in a Docker container, never on the desktop:
 

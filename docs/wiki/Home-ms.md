@@ -7,3 +7,4 @@ Papan Kanban gaya Trello dalam Python 3.13 dengan pustaka standard, SQLite dan J
 ## Langkah
 
 - [Langkah 1: Asas projek](Step-1-Foundation-ms): alat, lapisan dan halaman pertama.
+- [Langkah 2: Domain dan storan](Step-2-Domain-Storage-ms): peraturan papan, SQLite dan halaman papan.

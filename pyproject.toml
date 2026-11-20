@@ -27,7 +27,7 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests/unit", "tests/integration"]
-pythonpath = ["src"]
+pythonpath = ["src", "tests"]
 addopts = "--cov=todo_list --cov-report=term-missing"
 
 [tool.coverage.run]
@@ -46,4 +46,4 @@ select = ["E", "F", "I", "N", "UP", "B", "SIM"]
 
 [tool.mypy]
 strict = true
-mypy_path = "src"
+mypy_path = "src:tests"
