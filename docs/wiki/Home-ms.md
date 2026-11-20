@@ -11,3 +11,4 @@ Papan Kanban gaya Trello dalam Python 3.13 dengan pustaka standard, SQLite dan J
 - [Langkah 3: API JSON dan penyuntingan](Step-3-Api-Editing-ms): API, penghala dan kawalan penyuntingan.
 - [Langkah 4: Papan Kanban dan seret lepas](Step-4-Kanban-Board-ms): mengalih kad dan senarai.
 - [Langkah 5: Butiran kad](Step-5-Card-Details-ms): label, huraian, tarikh akhir, selesai dan komen.
+- [Langkah 6: Penutup dan refleksi](Step-6-Wrap-Up-ms): semakan akhir dan apa yang kita pelajari.

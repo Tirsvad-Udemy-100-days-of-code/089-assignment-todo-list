@@ -146,12 +146,58 @@ def step_05(page: Page, base_url: str) -> None:
     page.wait_for_selector("dialog.details[open] .comment")
 
 
+def seed_finished_board(repository: SqliteBoardRepository) -> None:
+    """@brief Add labels, due dates, done marks and comments across all lists."""
+    seed_card_details(repository)
+    board = repository.first_board()
+    if board is None:
+        raise NotFoundError("No board to seed")
+    cards = {
+        card.title: card
+        for card_list in repository.lists_of(board.id)
+        for card in repository.cards_of(card_list.id)
+    }
+    details = [
+        ("Collect user feedback", "yellow", "", "2099-08-01", False),
+        ("Research dark mode", "blue", "", None, False),
+        ("Build the drag and drop", "green", "", "2099-04-10", False),
+        ("Write the wiki pages", "purple", "", "2020-02-01", False),
+        ("Check the API status codes", "red", "", "2099-05-05", False),
+        ("Review the SQLite schema", "orange", "", None, False),
+        ("Set up the virtual environment", "green", "", "2020-01-03", True),
+        ("Choose the stack", "blue", "", "2020-01-04", True),
+    ]
+    for title, label, description, due_date, done in details:
+        repository.update_card_details(
+            cards[title].id, label, description, due_date, done
+        )
+    created_at = "2026-01-06T10:00:00+00:00"
+    for title, text in (
+        ("Build the drag and drop", "Works with the mouse."),
+        ("Build the drag and drop", "Touch support later."),
+        ("Build the drag and drop", "Keep the order stable."),
+        ("Write the wiki pages", "One page per step."),
+        ("Review the SQLite schema", "Looks fine."),
+        ("Choose the stack", "Python and SQLite."),
+    ):
+        repository.add_comment(cards[title].id, text, created_at)
+
+
+def step_06(page: Page, base_url: str) -> None:
+    """@brief Show the finished board with no dialog open."""
+    page.set_viewport_size({"width": 1700, "height": 720})
+    page.goto(base_url + "/")
+    page.wait_for_selector(".card")
+    page.evaluate("document.getElementById('board').scrollLeft = 0")
+
+
 SCENARIOS: dict[str, Callable[[Page, str], None]] = {
     "step-01": step_01,
     "step-02": step_02,
     "step-03": step_03,
     "step-04": step_04,
     "step-05": step_05,
+    "step-06": step_06,
 }
 
 
@@ -169,6 +215,8 @@ def main(step: str) -> int:
         seed_demo_cards(repository)
     if step == "step-05":
         seed_card_details(repository)
+    if step == "step-06":
+        seed_finished_board(repository)
     server = create_server("127.0.0.1", 0, router)
     threading.Thread(target=server.serve_forever, daemon=True).start()
     host, port = server.server_address[:2]
