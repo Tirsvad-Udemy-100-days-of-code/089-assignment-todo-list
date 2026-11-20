@@ -9,7 +9,7 @@
 ## Version History
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
-| 2026-11-20 | Proposed | Jens Tirsvad Nielsen | S01 | Initial version | pending |
+| 2026-11-20 | Proposed | Jens Tirsvad Nielsen | S01 | Initial version | [a3a64c5] |
 
 ---
 
@@ -77,3 +77,4 @@ updated whenever an artifact instance is created or reviewed.
 [RC-007]: ./reviews/rc-007-mil-004.md
 [RC-008]: ./reviews/rc-008-mil-005.md
 [RC-009]: ./reviews/rc-009-mil-006.md
+[a3a64c5]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/089-assignment-todo-list/commit/a3a64c5ad7831b1e3ad88ecf9902ebcf6f2f0d16

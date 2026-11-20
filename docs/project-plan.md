@@ -11,7 +11,7 @@
 ## Version History
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
-| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Initial version | pending |
+| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Initial version | [a3a64c5] |
 
 ---
 
@@ -104,3 +104,4 @@ the end date of 2026-12-04 is reported as at risk in the run summary.
 [MIL-004]: ./milestones/mil-004-kanban-board-ui.md
 [MIL-005]: ./milestones/mil-005-card-details.md
 [MIL-006]: ./milestones/mil-006-wiki-release.md
+[a3a64c5]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/089-assignment-todo-list/commit/a3a64c5ad7831b1e3ad88ecf9902ebcf6f2f0d16
